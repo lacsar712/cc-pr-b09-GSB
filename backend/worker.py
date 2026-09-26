@@ -26,6 +26,7 @@ def ensure():
             """CREATE TABLE IF NOT EXISTS jobs (
                 id serial PRIMARY KEY,
                 sheet text NOT NULL,
+                press text NOT NULL DEFAULT '',
                 cyan_mm double precision NOT NULL,
                 magenta_mm double precision NOT NULL,
                 status text NOT NULL,
@@ -35,6 +36,7 @@ def ensure():
                 created_at timestamptz NOT NULL
             )"""
         )
+        conn.execute("ALTER TABLE jobs ADD COLUMN IF NOT EXISTS press text NOT NULL DEFAULT ''")
         conn.commit()
 
 
