@@ -26,6 +26,7 @@ def ensure():
             """CREATE TABLE IF NOT EXISTS jobs (
                 id serial PRIMARY KEY,
                 sheet text NOT NULL,
+                machine text NOT NULL DEFAULT '',
                 cyan_mm double precision NOT NULL,
                 magenta_mm double precision NOT NULL,
                 status text NOT NULL,
@@ -33,7 +34,21 @@ def ensure():
                 reason text NOT NULL DEFAULT '',
                 created_by text NOT NULL,
                 created_at timestamptz NOT NULL
-            )"""
+            );
+            CREATE TABLE IF NOT EXISTS handovers (
+                id serial PRIMARY KEY,
+                created_by text NOT NULL,
+                created_at timestamptz NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS handover_items (
+                id serial PRIMARY KEY,
+                handover_id integer NOT NULL REFERENCES handovers(id),
+                job_id integer NOT NULL,
+                sheet text NOT NULL,
+                machine text NOT NULL,
+                status text NOT NULL
+            );
+            ALTER TABLE jobs ADD COLUMN IF NOT EXISTS machine text NOT NULL DEFAULT '';"""
         )
         conn.commit()
 
